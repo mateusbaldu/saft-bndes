@@ -1,0 +1,9 @@
+CREATE TABLE operacao_bndes (
+     id BIGSERIAL PRIMARY KEY,
+     nome_empresa VARCHAR(255) NOT NULL,
+     setor VARCHAR(150) NOT NULL,
+     valor DECIMAL(19, 2) NOT NULL,
+     estado VARCHAR(2) NOT NULL,
+     ano INT NOT NULL,
+     criado_em TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
