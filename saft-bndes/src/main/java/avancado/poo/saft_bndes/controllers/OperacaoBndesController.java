@@ -1,0 +1,35 @@
+package avancado.poo.saft_bndes.controllers;
+
+import avancado.poo.saft_bndes.exceptions.EmptyFileException;
+import avancado.poo.saft_bndes.services.OperacaoBndesService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+@RestController
+@RequestMapping("/operacoes")
+public class OperacaoBndesController {
+    private final OperacaoBndesService service;
+
+    public OperacaoBndesController(OperacaoBndesService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/carga")
+    public ResponseEntity<String> adicionarDados(@RequestParam("file") MultipartFile arquivo) throws IOException {
+        if (arquivo.isEmpty()) {
+            throw new EmptyFileException("O arquivo CSV está vazio.");
+        }
+
+        Path tempFile = Files.createTempFile("carga-bndes-", ".csv");
+        arquivo.transferTo(tempFile);
+
+        service.adicionarDados(tempFile);
+
+        return ResponseEntity.accepted().body("Arquivo está sendo processado em segundo plano.");
+    }
+}
