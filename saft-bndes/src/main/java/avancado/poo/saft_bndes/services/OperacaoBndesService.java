@@ -1,12 +1,15 @@
 package avancado.poo.saft_bndes.services;
 
-import org.springframework.data.domain.Pageable;
+import avancado.poo.saft_bndes.dto.RegistroResponse;
+import avancado.poo.saft_bndes.enums.EstadosBrasileiros;
 import avancado.poo.saft_bndes.models.OperacaoBndes;
 import avancado.poo.saft_bndes.repositories.OperacaoBndesRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -78,11 +81,23 @@ public class OperacaoBndesService {
             }
         }
     }
+  
     public Page <OperacaoBndes> findBySetor(String setor, Pageable pageable){
         Page<OperacaoBndes> resultado = repository.findBySetor(setor, pageable);
         if (resultado.isEmpty()){
             throw new EntityNotFoundException("Setor '" + setor + "' não encontrado.");
         }
         return resultado;
+
+    public Page<RegistroResponse> buscarPorEstado(EstadosBrasileiros estado, Pageable pageable) {
+        return repository.findByEstado(estado.name(), pageable)
+                .map(operacao -> new RegistroResponse(
+                        operacao.getId(),
+                        operacao.getNomeEmpresa(),
+                        operacao.getSetor(),
+                        operacao.getValor(),
+                        operacao.getEstado(),
+                        operacao.getData()
+                ));
     }
 }
