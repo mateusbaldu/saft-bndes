@@ -1,9 +1,12 @@
 package avancado.poo.saft_bndes.services;
 
+import org.springframework.data.domain.Pageable;
 import avancado.poo.saft_bndes.models.OperacaoBndes;
 import avancado.poo.saft_bndes.repositories.OperacaoBndesRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +77,12 @@ public class OperacaoBndesService {
                 System.out.println("Não foi possível deletar arquivo temporário: " + arquivo);
             }
         }
+    }
+    public Page <OperacaoBndes> findBySetor(String setor, Pageable pageable){
+        Page<OperacaoBndes> resultado = repository.findBySetor(setor, pageable);
+        if (resultado.isEmpty()){
+            throw new EntityNotFoundException("Setor '" + setor + "' não encontrado.");
+        }
+        return resultado;
     }
 }
