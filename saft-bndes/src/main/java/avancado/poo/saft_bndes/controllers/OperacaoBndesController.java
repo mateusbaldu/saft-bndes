@@ -4,11 +4,8 @@ import org.springframework.data.domain.Pageable;
 import avancado.poo.saft_bndes.dto.RegistroResponse;
 import avancado.poo.saft_bndes.enums.EstadosBrasileiros;
 import avancado.poo.saft_bndes.exceptions.EmptyFileException;
-import avancado.poo.saft_bndes.models.OperacaoBndes;
 import avancado.poo.saft_bndes.services.OperacaoBndesService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,10 +38,11 @@ public class OperacaoBndesController {
     }
 
     @GetMapping("/setor/{setor}")
-    public ResponseEntity<Page<OperacaoBndes>> findBySetor(
+    public ResponseEntity<Page<RegistroResponse>> findBySetor(
             @PathVariable String setor, Pageable pageable) {
         return ResponseEntity.ok(service.findBySetor(setor, pageable));
-      
+    }
+
     @GetMapping
     public ResponseEntity<Page<RegistroResponse>> buscarPorEstado(@RequestParam EstadosBrasileiros estado, Pageable pageable) {
         Page<RegistroResponse> operacoes = service.buscarPorEstado(estado, pageable);

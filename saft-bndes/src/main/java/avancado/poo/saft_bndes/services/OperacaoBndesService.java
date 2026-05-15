@@ -8,7 +8,6 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -82,12 +81,20 @@ public class OperacaoBndesService {
         }
     }
   
-    public Page <OperacaoBndes> findBySetor(String setor, Pageable pageable){
+    public Page<RegistroResponse> findBySetor(String setor, Pageable pageable) {
         Page<OperacaoBndes> resultado = repository.findBySetor(setor, pageable);
-        if (resultado.isEmpty()){
+        if (resultado.isEmpty()) {
             throw new EntityNotFoundException("Setor '" + setor + "' não encontrado.");
         }
-        return resultado;
+        return resultado.map(operacao -> new RegistroResponse(
+                        operacao.getId(),
+                        operacao.getNomeEmpresa(),
+                        operacao.getSetor(),
+                        operacao.getValor(),
+                        operacao.getEstado(),
+                        operacao.getData()
+        ));
+    }
 
     public Page<RegistroResponse> buscarPorEstado(EstadosBrasileiros estado, Pageable pageable) {
         return repository.findByEstado(estado.name(), pageable)
