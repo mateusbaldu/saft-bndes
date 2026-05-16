@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OperacaoBndesService {
@@ -107,4 +107,15 @@ public class OperacaoBndesService {
                         operacao.getData()
                 ));
     }
+
+    public Map<String, BigDecimal> totalPorEstado() {
+        return repository.somarFinanciamentoPorEstado().stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],
+                        row -> (BigDecimal) row[1],
+                        (v1, v2) -> v1,
+                        LinkedHashMap::new
+                ));
+    }
 }
+
