@@ -108,6 +108,18 @@ public class OperacaoBndesService {
                 ));
     }
 
+    public Page<RegistroResponse> findByValorAprovado(BigDecimal valorAprovado, Pageable pageable) {
+        return repository.findByValorGreaterThanEqual(valorAprovado, pageable)
+                .map(operacao -> new RegistroResponse(
+                        operacao.getId(),
+                        operacao.getNomeEmpresa(),
+                        operacao.getSetor(),
+                        operacao.getValor(),
+                        operacao.getEstado(),
+                        operacao.getData()
+                 ));
+    }
+                  
     public Map<String, BigDecimal> totalPorEstado() {
         return repository.somarFinanciamentoPorEstado().stream()
                 .collect(Collectors.toMap(

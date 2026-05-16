@@ -45,6 +45,11 @@ public class OperacaoBndesController {
         return ResponseEntity.ok(service.findBySetor(setor, pageable));
     }
 
+    @GetMapping("/valor/{valorAprovado}")
+    public ResponseEntity<Page<RegistroResponse>> findByValorAprovado(@PathVariable BigDecimal valorAprovado, Pageable pageable) {
+        return ResponseEntity.ok(service.findByValorAprovado(valorAprovado, pageable));
+    }
+
     @GetMapping
     public ResponseEntity<Page<RegistroResponse>> buscarPorEstado(@RequestParam EstadosBrasileiros estado, Pageable pageable) {
         Page<RegistroResponse> operacoes = service.buscarPorEstado(estado, pageable);
