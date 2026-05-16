@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -98,6 +99,18 @@ public class OperacaoBndesService {
 
     public Page<RegistroResponse> buscarPorEstado(EstadosBrasileiros estado, Pageable pageable) {
         return repository.findByEstado(estado.name(), pageable)
+                .map(operacao -> new RegistroResponse(
+                        operacao.getId(),
+                        operacao.getNomeEmpresa(),
+                        operacao.getSetor(),
+                        operacao.getValor(),
+                        operacao.getEstado(),
+                        operacao.getData()
+                ));
+    }
+
+    public Page<RegistroResponse> findByValorAprovado(BigDecimal valorAprovado, Pageable pageable) {
+        return repository.findByValorGreaterThanEqual(valorAprovado, pageable)
                 .map(operacao -> new RegistroResponse(
                         operacao.getId(),
                         operacao.getNomeEmpresa(),

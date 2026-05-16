@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -41,6 +42,11 @@ public class OperacaoBndesController {
     public ResponseEntity<Page<RegistroResponse>> findBySetor(
             @PathVariable String setor, Pageable pageable) {
         return ResponseEntity.ok(service.findBySetor(setor, pageable));
+    }
+
+    @GetMapping("/valor/{valorAprovado}")
+    public ResponseEntity<Page<RegistroResponse>> findByValorAprovado(@PathVariable BigDecimal valorAprovado, Pageable pageable) {
+        return ResponseEntity.ok(service.findByValorAprovado(valorAprovado, pageable));
     }
 
     @GetMapping
