@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/operacoes")
@@ -48,4 +50,10 @@ public class OperacaoBndesController {
         Page<RegistroResponse> operacoes = service.buscarPorEstado(estado, pageable);
         return ResponseEntity.ok(operacoes);
     }
+
+    @GetMapping("/total-por-estado")
+    public ResponseEntity<Map<String, BigDecimal>> totalPorEstado() {
+        return ResponseEntity.ok(service.totalPorEstado());
+    }
 }
+
