@@ -2,6 +2,7 @@ package avancado.poo.saft_bndes.services;
 
 import avancado.poo.saft_bndes.dto.RegistroResponse;
 import avancado.poo.saft_bndes.enums.EstadosBrasileiros;
+import avancado.poo.saft_bndes.mappers.OperacaoBndesMapper;
 import avancado.poo.saft_bndes.models.OperacaoBndes;
 import avancado.poo.saft_bndes.repositories.OperacaoBndesRepository;
 import com.opencsv.bean.CsvToBean;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
 @Service
 public class OperacaoBndesService {
     private final OperacaoBndesRepository repository;
+    private final OperacaoBndesMapper mapper;
 
-    public OperacaoBndesService(OperacaoBndesRepository repository) {
+    public OperacaoBndesService(OperacaoBndesRepository repository, OperacaoBndesMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Async
@@ -81,31 +84,23 @@ public class OperacaoBndesService {
         }
     }
   
+    public RegistroResponse buscarPorId(Long id) {
+        OperacaoBndes operacao = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Operação com ID " + id + " não encontrada."));
+        return mapper.toResponse(operacao);
+    }
+
     public Page<RegistroResponse> findBySetor(String setor, Pageable pageable) {
         Page<OperacaoBndes> resultado = repository.findBySetor(setor, pageable);
         if (resultado.isEmpty()) {
             throw new EntityNotFoundException("Setor '" + setor + "' não encontrado.");
         }
-        return resultado.map(operacao -> new RegistroResponse(
-                        operacao.getId(),
-                        operacao.getNomeEmpresa(),
-                        operacao.getSetor(),
-                        operacao.getValor(),
-                        operacao.getEstado(),
-                        operacao.getData()
-        ));
+        return resultado.map(mapper::toResponse);
     }
 
     public Page<RegistroResponse> buscarPorEstado(EstadosBrasileiros estado, Pageable pageable) {
         return repository.findByEstado(estado.name(), pageable)
-                .map(operacao -> new RegistroResponse(
-                        operacao.getId(),
-                        operacao.getNomeEmpresa(),
-                        operacao.getSetor(),
-                        operacao.getValor(),
-                        operacao.getEstado(),
-                        operacao.getData()
-                ));
+                .map(mapper::toResponse);
     }
 
     public Map<String, BigDecimal> totalPorEstado() {
