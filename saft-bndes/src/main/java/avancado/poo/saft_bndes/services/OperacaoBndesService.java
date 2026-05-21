@@ -117,5 +117,10 @@ public class OperacaoBndesService {
                         LinkedHashMap::new
                 ));
     }
+
+    public void delete(Long id) {
+        OperacaoBndes operacaoBndes = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Operação com ID " + id + " não encontrada."));
+        repository.delete(operacaoBndes);
+    }
 }
 

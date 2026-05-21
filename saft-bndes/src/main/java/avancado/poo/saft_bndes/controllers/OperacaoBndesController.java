@@ -65,5 +65,11 @@ public class OperacaoBndesController {
     public ResponseEntity<Map<String, BigDecimal>> totalPorEstado() {
         return ResponseEntity.ok(service.totalPorEstado());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
