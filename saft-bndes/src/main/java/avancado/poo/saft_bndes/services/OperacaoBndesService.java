@@ -103,6 +103,11 @@ public class OperacaoBndesService {
                 .map(mapper::toResponse);
     }
 
+    public Page<RegistroResponse> findByValorAprovado(BigDecimal valorAprovado, Pageable pageable) {
+        return repository.findByValorGreaterThanEqual(valorAprovado, pageable)
+                .map(mapper::toResponse);
+    }
+                  
     public Map<String, BigDecimal> totalPorEstado() {
         return repository.somarFinanciamentoPorEstado().stream()
                 .collect(Collectors.toMap(
