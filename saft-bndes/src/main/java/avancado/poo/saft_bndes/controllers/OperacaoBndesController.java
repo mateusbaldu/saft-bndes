@@ -39,9 +39,9 @@ public class OperacaoBndesController {
         return ResponseEntity.accepted().body("Arquivo está sendo processado em segundo plano.");
     }
 
-    @GetMapping("/setor/{setor}")
+    @GetMapping("/setor")
     public ResponseEntity<Page<RegistroResponse>> findBySetor(
-            @PathVariable String setor, Pageable pageable) {
+            @RequestParam String setor, Pageable pageable) {
         return ResponseEntity.ok(service.findBySetor(setor, pageable));
     }
 
