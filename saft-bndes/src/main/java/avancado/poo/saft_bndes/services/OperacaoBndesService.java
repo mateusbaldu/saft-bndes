@@ -1,5 +1,6 @@
 package avancado.poo.saft_bndes.services;
 
+import avancado.poo.saft_bndes.dto.RegistroRequest;
 import avancado.poo.saft_bndes.dto.RegistroResponse;
 import avancado.poo.saft_bndes.enums.EstadosBrasileiros;
 import avancado.poo.saft_bndes.mappers.OperacaoBndesMapper;
@@ -49,14 +50,6 @@ public class OperacaoBndesService {
 
             while (iterador.hasNext()) {
                 OperacaoBndes operacao = iterador.next();
-
-                if (operacao.getValor() == null) {
-                    continue;
-                }
-
-                if (operacao.getEstado() != null) {
-                    operacao.setEstado(operacao.getEstado().trim());
-                }
 
                 loteTemporario.add(operacao);
 
@@ -121,6 +114,11 @@ public class OperacaoBndesService {
     public void delete(Long id) {
         OperacaoBndes operacaoBndes = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Operação com ID " + id + " não encontrada."));
         repository.delete(operacaoBndes);
+    }
+
+    public OperacaoBndes salvarOperacao(RegistroRequest novoRegistro) {
+        OperacaoBndes novaOperacao = this.mapper.toModel(novoRegistro);
+        return repository.save(novaOperacao);
     }
 }
 

@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvDate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,10 +28,12 @@ public class OperacaoBndes {
 
     @CsvCustomBindByName(column = "valor_da_operacao_em_reais", converter = BigDecimalConverter.class)
     @Column(name = "valor")
+    @NotNull
     private BigDecimal valor;
 
     @CsvBindByName(column = "uf")
     @Column(name = "estado")
+    @NotNull
     private String estado;
 
     @CsvDate("yyyy-MM-dd")
@@ -71,7 +74,7 @@ public class OperacaoBndes {
     }
 
     public void setSetor(String setor) {
-        this.setor = setor;
+        this.setor = setor.trim();
     }
 
     public BigDecimal getValor() {
