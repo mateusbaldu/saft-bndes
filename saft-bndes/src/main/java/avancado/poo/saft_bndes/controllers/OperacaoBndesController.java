@@ -1,5 +1,8 @@
 package avancado.poo.saft_bndes.controllers;
 
+import avancado.poo.saft_bndes.dto.RegistroRequest;
+import avancado.poo.saft_bndes.models.OperacaoBndes;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import avancado.poo.saft_bndes.dto.RegistroResponse;
 import avancado.poo.saft_bndes.enums.EstadosBrasileiros;
@@ -70,6 +73,11 @@ public class OperacaoBndesController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<OperacaoBndes> salvarOperacao(@RequestBody @Valid RegistroRequest novoRegistro) {
+        return ResponseEntity.ok(service.salvarOperacao(novoRegistro));
     }
 }
 
